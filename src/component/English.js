@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EnglishGrammarQuiz } from "../constant";
-import Result from "./Result"; 
+import Result from "./Result";
 
 export default function English() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -8,13 +8,14 @@ export default function English() {
   const [answers, setAnswers] = useState(Array(EnglishGrammarQuiz.questions.length).fill(null));
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const currentQuestion = EnglishGrammarQuiz.questions[currentQuestionIndex];
+  const { question, options } = currentQuestion;
+
   const handleNextQuestion = () => {
     if (selectedOption !== null) {
-      setAnswers((prev) => {
-        const updatedAnswers = [...prev];
-        updatedAnswers[currentQuestionIndex] = selectedOption;
-        return updatedAnswers;
-      });
+      const updatedAnswers = [...answers];
+      updatedAnswers[currentQuestionIndex] = selectedOption;
+      setAnswers(updatedAnswers);
 
       if (currentQuestionIndex < EnglishGrammarQuiz.questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -32,56 +33,38 @@ export default function English() {
     }
   };
 
-  const { question, options } = EnglishGrammarQuiz.questions[currentQuestionIndex];
-
   if (isSubmitted) {
     const score = answers.reduce((score, answer, index) => {
-      if (answer === EnglishGrammarQuiz.questions[index].correctAnswer) {
-        return score + 1;
-      }
-      return score;
+      return answer === EnglishGrammarQuiz.questions[index].correctAnswer
+        ? score + 1
+        : score;
     }, 0);
 
     return <Result score={score} total={EnglishGrammarQuiz.questions.length} answers={answers} quiz={EnglishGrammarQuiz.questions} />;
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        maxWidth: "600px",
-        margin: "auto",
-        textAlign: "center",
-      }}
-    >
-      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>
-        {EnglishGrammarQuiz.title}
-      </h1>
+    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto", textAlign: "center" }}>
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>{EnglishGrammarQuiz.title}</h1>
+
       <div style={{ marginBottom: "20px" }}>
         <h2 style={{ fontSize: "20px" }}>{question}</h2>
         <ul style={{ listStyleType: "none", padding: 0 }}>
-          {options.map((option) => (
+          {options.map(({ option, text }) => (
             <li
-              key={option.option}
-              style={{
-                margin: "10px 0",
-                fontSize: "18px",
-                display: "flex",
-                alignItems: "center",
-              }}
+              key={option}
+              style={{ margin: "10px 0", fontSize: "18px", display: "flex", alignItems: "center" }}
             >
               <input
                 type="radio"
-                id={option.option}
+                id={option}
                 name="quiz-option"
-                value={option.option}
-                checked={selectedOption === option.option}
-                onChange={() => setSelectedOption(option.option)}
+                value={option}
+                checked={selectedOption === option}
+                onChange={() => setSelectedOption(option)}
                 style={{ marginRight: "10px" }}
               />
-              <label htmlFor={option.option}>
-                {option.option}: {option.text}
-              </label>
+              <label htmlFor={option}>{option}: {text}</label>
             </li>
           ))}
         </ul>
@@ -91,13 +74,11 @@ export default function English() {
         onClick={handlePreviewQuestion}
         disabled={currentQuestionIndex === 0}
         className="px-4 py-2 text-lg font-semibold rounded-md bg-blue-600 hover:bg-blue-500 text-white transition duration-200"
-        style={{
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          marginLeft: "10px",
-        }}
+        style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", marginLeft: "10px" }}
       >
         Preview
       </button>
+
       <button
         onClick={handleNextQuestion}
         disabled={selectedOption === null}

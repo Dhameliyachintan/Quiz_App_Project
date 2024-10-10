@@ -11,9 +11,6 @@ const Navbar = () => {
         <li>
           <Link to="/" className="text-gray-300 hover:text-white transition duration-200">Home</Link>
         </li>
-        <li>
-          <Link to="/result" className="text-gray-300 hover:text-white transition duration-200">Result</Link>
-        </li>
       </ul>
     </nav>
   );

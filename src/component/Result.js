@@ -9,22 +9,23 @@ export default function Result({ score, total, answers = [], quiz }) {
       <h2 className="text-xl mb-5">
         You scored {score} out of {total}!
       </h2>
-      <h2 className="text-xl mb-5">
-        Percentage: {percentage}%
-      </h2>
+      <h2 className="text-xl mb-5">Percentage: {percentage}%</h2>
+
       <div className="flex justify-center flex-wrap mt-5">
         {quiz.map((question, index) => {
-          const userAnswer = answers[index];
-          const isCorrect = userAnswer === question.correctAnswer;
+          const isCorrect = answers[index] === question.correctAnswer;
           return (
-            <div
-              key={index}
-              className={`w-12 h-12 rounded-full flex items-center justify-center m-2 text-white font-bold ${
-                isCorrect ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {index + 1}
-            </div>
+            <>
+              <div
+                key={index}
+                className={`w-12 h-12 rounded-full flex items-center justify-center m-2 text-white font-bold ${
+                  isCorrect ? "bg-green-500" : "bg-red-500"
+                }`}
+              >
+                {index + 1}
+              </div>
+              <h2>{quiz.title}</h2>
+            </>
           );
         })}
       </div>
@@ -32,22 +33,23 @@ export default function Result({ score, total, answers = [], quiz }) {
       <div className="mt-5">
         <h3 className="text-lg">Your Answers:</h3>
         <ul className="list-disc list-inside">
-          {quiz.map((question, index) => (
-            <li
-              key={index}
-              className={`${
-                answers[index] === question.correctAnswer
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}
-            >
-              <strong>{question.question}</strong>
-              <br />
-              Your answer: {answers[index]}
-              <br />
-              Correct answer: {question.correctAnswer}
-            </li>
-          ))}
+          {quiz.map(({ question, correctAnswer }, index) => {
+            const userAnswer = answers[index];
+            const isCorrect = userAnswer === correctAnswer;
+
+            return (
+              <li
+                key={index}
+                className={isCorrect ? "text-green-600" : "text-red-600"}
+              >
+                <strong>{question}</strong>
+                <br />
+                Your answer: {userAnswer || "No answer selected"}
+                <br />
+                Correct answer: {correctAnswer}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

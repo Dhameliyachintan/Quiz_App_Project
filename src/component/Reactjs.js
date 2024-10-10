@@ -8,53 +8,55 @@ export default function Reactjs() {
   const [answers, setAnswers] = useState(Array(ReactjsQuiz.length).fill(null));
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const updateAnswers = (newAnswer) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[currentQuestionIndex] = newAnswer;
+    setAnswers(updatedAnswers);
+  };
+
   const handleNextQuestion = () => {
     if (selectedOption !== null) {
-      setAnswers((prev) => {
-        const updatedAnswers = [...prev];
-        updatedAnswers[currentQuestionIndex] = selectedOption;
-        return updatedAnswers;
-      });
+      updateAnswers(selectedOption);
       if (currentQuestionIndex < ReactjsQuiz.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        setSelectedOption(null);
       } else {
         setIsSubmitted(true);
       }
-      setSelectedOption(null);
     }
   };
 
   const handlePreviewQuestion = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
       setSelectedOption(answers[currentQuestionIndex - 1]);
     }
   };
 
   const handleSubmitQuiz = () => {
     if (selectedOption !== null) {
-      setAnswers((prev) => {
-        const updatedAnswers = [...prev];
-        updatedAnswers[currentQuestionIndex] = selectedOption;
-        return updatedAnswers;
-      });
+      updateAnswers(selectedOption);
       setIsSubmitted(true);
     }
   };
 
-  const calculateResult = () => {
-    return answers.reduce((score, answer, index) => {
-      if (answer === ReactjsQuiz[index].correctAnswer) {
-        return score + 1;
-      }
-      return score;
-    }, 0);
-  };
+  const calculateResult = () =>
+    answers.reduce(
+      (score, answer, index) =>
+        answer === ReactjsQuiz[index].correctAnswer ? score + 1 : score,
+      0
+    );
 
   if (isSubmitted) {
     const score = calculateResult();
     return (
-        <Result score={score} total={ReactjsQuiz.length} answers={answers} quiz={ReactjsQuiz} title={ReactjsQuiz.title} />
+      <Result
+        score={score}
+        total={ReactjsQuiz.length}
+        answers={answers}
+        quiz={ReactjsQuiz}
+        title={ReactjsQuiz.title}
+      />
     );
   }
 
@@ -66,36 +68,37 @@ export default function Reactjs() {
       <div className="mb-5">
         <h2 className="text-xl mb-3">{question}</h2>
         <ul className="list-none p-0">
-          {options.map((option) => {
-            const isSelected = selectedOption === option.option;
+          {options.map(({ option, text }) => {
+            const isSelected = selectedOption === option;
+            const isCorrect = option === ReactjsQuiz[currentQuestionIndex].correctAnswer;
             const isAnswered = isSubmitted && answers[currentQuestionIndex] !== null;
 
             return (
-              <li key={option.option} className="my-2 text-lg flex items-center">
+              <li key={option} className="my-2 text-lg flex items-center">
                 <input
                   type="radio"
-                  id={option.option}
+                  id={option}
                   name="quiz-option"
-                  value={option.option}
+                  value={option}
                   checked={isSelected}
-                  onChange={() => setSelectedOption(option.option)}
+                  onChange={() => setSelectedOption(option)}
                   className="mr-2"
                 />
                 <label
-                  htmlFor={option.option}
+                  htmlFor={option}
                   className={`p-2 rounded-md ${
                     isAnswered
-                      ? isSelected && option.option === ReactjsQuiz[currentQuestionIndex].correctAnswer
+                      ? isSelected && isCorrect
                         ? "bg-green-500"
                         : isSelected
                         ? "bg-red-500"
-                        : option.option === ReactjsQuiz[currentQuestionIndex].correctAnswer
+                        : isCorrect
                         ? "bg-green-200"
                         : ""
                       : ""
                   }`}
                 >
-                  {option.option}: {option.text}
+                  {option}: {text}
                 </label>
               </li>
             );
