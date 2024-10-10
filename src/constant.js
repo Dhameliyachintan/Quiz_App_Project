@@ -8,7 +8,7 @@ const SubjectsData = {
   ],
   react: [
     {
-      title: "React js",
+      title: "Welcome to React js",
       description:
         "An introduction to building user interfaces with React, emphasizing component-based architecture and hooks for state management.",
     },

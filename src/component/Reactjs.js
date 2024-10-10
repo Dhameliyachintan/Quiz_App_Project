@@ -20,8 +20,6 @@ export default function Reactjs() {
       if (currentQuestionIndex < ReactjsQuiz.length - 1) {
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         setSelectedOption(null);
-      } else {
-        setIsSubmitted(true);
       }
     }
   };
@@ -117,28 +115,32 @@ export default function Reactjs() {
       >
         Preview
       </button>
-      <button
-        onClick={handleNextQuestion}
-        disabled={selectedOption === null}
-        className={`ml-2 px-4 py-2 text-lg font-semibold rounded-md transition duration-200 ${
-          selectedOption === null
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-500 text-white"
-        }`}
-      >
-        Next
-      </button>
-      <button
-        onClick={handleSubmitQuiz}
-        className={`ml-2 px-4 py-2 text-lg font-semibold rounded-md transition duration-200 ${
-          selectedOption === null
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-red-600 hover:bg-red-500 text-white"
-        }`}
-        disabled={selectedOption === null}
-      >
-        Submit Quiz
-      </button>
+
+      {currentQuestionIndex < ReactjsQuiz.length - 1 ? (
+        <button
+          onClick={handleNextQuestion}
+          disabled={selectedOption === null}
+          className={`ml-2 px-4 py-2 text-lg font-semibold rounded-md transition duration-200 ${
+            selectedOption === null
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500 text-white"
+          }`}
+        >
+          Next
+        </button>
+      ) : (
+        <button
+          onClick={handleSubmitQuiz}
+          className={`ml-2 px-4 py-2 text-lg font-semibold rounded-md transition duration-200 ${
+            selectedOption === null
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-red-600 hover:bg-red-500 text-white"
+          }`}
+          disabled={selectedOption === null}
+        >
+          Submit
+        </button>
+      )}
     </div>
   );
 }
