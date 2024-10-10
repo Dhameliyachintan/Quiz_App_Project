@@ -1,14 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; 
 
-export default function Result({ score, total, answers = [], quiz, resetQuiz }) {
+export default function Result({ score, total, answers = [], quiz }) {
   const percentage = ((score / total) * 100).toFixed(2);
-  const navigate = useNavigate(); 
-
-  const handleReset = () => {
-    resetQuiz(); 
-    navigate('/'); 
-  };
 
   const performanceMessage =
     percentage >= 75 ? "Great job!" :
@@ -60,15 +53,6 @@ export default function Result({ score, total, answers = [], quiz, resetQuiz }) 
             );
           })}
         </ul>
-      </div>
-
-      <div className="mt-5">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={handleReset} // Call reset function on button click
-        >
-          Try Again
-        </button>
       </div>
     </div>
   );
