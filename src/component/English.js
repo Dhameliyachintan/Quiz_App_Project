@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { EnglishGrammarQuiz } from "../constant";
 import Result from "./Result";
+import { useSnackbar } from "notistack";
 
 export default function English() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [answers, setAnswers] = useState(Array(EnglishGrammarQuiz.questions.length).fill(null));
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const currentQuestion = EnglishGrammarQuiz.questions[currentQuestionIndex];
   const { question, options } = currentQuestion;
@@ -21,6 +23,7 @@ export default function English() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedOption(null);
       } else {
+        enqueueSnackbar("Quiz submitted successfully!", { variant: "success" });
         setIsSubmitted(true);
       }
     }

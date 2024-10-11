@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { ReactjsQuiz } from "../constant";
 import Result from "./Result";
+import { useSnackbar } from "notistack";
 
 export default function Reactjs() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [answers, setAnswers] = useState(Array(ReactjsQuiz.length).fill(null));
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const updateAnswers = (newAnswer) => {
     const updatedAnswers = [...answers];
@@ -35,6 +37,7 @@ export default function Reactjs() {
     if (selectedOption !== null) {
       updateAnswers(selectedOption);
       setIsSubmitted(true);
+      enqueueSnackbar("Quiz submitted successfully!", { variant: "success" });
     }
   };
 
