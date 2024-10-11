@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Result({ score, total, answers = [], quiz }) {
+  const navigate = useNavigate();
   const percentage = ((score / total) * 100).toFixed(2);
 
   const performanceMessage =
@@ -54,6 +56,13 @@ export default function Result({ score, total, answers = [], quiz }) {
           })}
         </ul>
       </div>
+
+      <button
+        onClick={() => navigate('/')}
+        className="mt-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+      >
+        Back to Home
+      </button>
     </div>
   );
 }
